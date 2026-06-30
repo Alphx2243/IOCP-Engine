@@ -1,8 +1,8 @@
 #include "transport/websocket_transport.hpp"
 #include <algorithm>
 #include <array>
-#include <cctype>
-#include <cstring>
+#include <cctype>  // char functions like tolower(), etc..
+#include <cstring> // string memory functions
 #include <limits>
 #include <sstream>
 #include <unordered_map>

@@ -153,7 +153,7 @@ payload_length bytes of FlatBuffer NetworkMessage
 ```
 
 WebSocket clients send binary frames containing one `NetworkMessage`. Text
-frames are rejected. Client frames must be masked as required by RFC 6455.
+frames are rejected. Client frames must be masked.
 
 Valid room prefixes include:
 

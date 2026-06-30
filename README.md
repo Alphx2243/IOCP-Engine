@@ -167,15 +167,6 @@ booking:user:
 
 See [docs/protocol.md](docs/protocol.md) for the full protocol notes.
 
-## Documentation
-
-- [Architecture](docs/architecture.md)
-- [Protocol](docs/protocol.md)
-- [Technical handbook](docs/technical-handbook.md)
-- [Benchmark methodology](docs/benchmark.md)
-- [Implementation status](docs/implementation-status.md)
-- [Interview notes](docs/interview-notes.md)
-
 ## Current Limitations
 
 - Authentication is intentionally demo-level: one configured token plus
@@ -189,9 +180,3 @@ See [docs/protocol.md](docs/protocol.md) for the full protocol notes.
 - Existing tests cover important protocol and SDK behavior, but serious
   production rollout should add fuzzing, soak tests, slow-consumer tests,
   failure injection, and full client/server integration tests.
-
-## Resume Pitch
-
-Built a Windows IOCP realtime engine in C++20 with strict WebSocket parsing,
-raw TCP framing, FlatBuffers schema generation, room-based pub/sub, backpressure
-limits, structured metrics, and a typed TypeScript SDK.

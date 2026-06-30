@@ -1,0 +1,186 @@
+namespace RealtimeEngine;
+
+file_identifier "RTE1";
+
+enum MatchStatus : byte {
+  UPCOMING = 0,
+  LIVE,
+  FINISHED,
+  CANCELLED
+}
+
+enum ResourceStatus : byte {
+  AVAILABLE = 0,
+  OCCUPIED,
+  MAINTENANCE
+}
+
+enum AlertSeverity : byte {
+  INFO = 0,
+  WARNING,
+  ERROR,
+  CRITICAL
+}
+
+enum SubscriptionOperation : byte {
+  JOIN = 0,
+  LEAVE
+}
+
+enum ErrorCode : uint16 {
+  NONE = 0,
+  MALFORMED_MESSAGE,
+  UNSUPPORTED_VERSION,
+  UNAUTHORIZED,
+  FORBIDDEN,
+  INVALID_ROOM,
+  NOT_SUBSCRIBED,
+  ALREADY_SUBSCRIBED,
+  RATE_LIMITED,
+  BACKPRESSURE,
+  INTERNAL_ERROR
+}
+
+table MatchInfo {
+  match_id: string (required);
+  sport_name: string (required);
+  team1: string (required);
+  team2: string (required);
+  score_team1: uint16;
+  score_team2: uint16;
+  status: MatchStatus;
+  updated_at_ms: uint64;
+}
+
+table MatchScoreUpdate {
+  match_id: string (required);
+  score_team1: uint16;
+  score_team2: uint16;
+  timeline_event: string;
+  updated_at_ms: uint64;
+}
+
+table CourtStatus {
+  facility_id: string (required);
+  court_id: string (required);
+  sport_name: string (required);
+  court_name: string (required);
+  status: ResourceStatus;
+  next_available_at_ms: uint64;
+}
+
+table FacilityUpdate {
+  facility_id: string (required);
+  courts: [CourtStatus] (required);
+  updated_at_ms: uint64;
+}
+
+table EquipmentStatus {
+  facility_id: string (required);
+  equipment_id: string (required);
+  item_name: string (required);
+  total_inventory: uint32;
+  available_count: uint32;
+}
+
+table EquipmentUpdate {
+  facility_id: string (required);
+  inventory: [EquipmentStatus] (required);
+  updated_at_ms: uint64;
+}
+
+table BookingNotification {
+  booking_id: string (required);
+  user_id: string (required);
+  resource_id: string (required);
+  user_display_name: string;
+  start_time_ms: uint64;
+  end_time_ms: uint64;
+}
+
+table SystemAlert {
+  code: uint32;
+  severity: AlertSeverity;
+  message: string (required);
+}
+
+table Ping {
+  timestamp_ms: uint64;
+}
+
+table Pong {
+  timestamp_ms: uint64;
+}
+
+union DomainPayload {
+  MatchInfo,
+  MatchScoreUpdate,
+  FacilityUpdate,
+  EquipmentUpdate,
+  BookingNotification,
+  SystemAlert
+}
+
+table Authenticate {
+  token: string (required);
+}
+
+table AuthenticationResult {
+  accepted: bool;
+  principal_id: string;
+  reason: string;
+}
+
+table JoinRoom {
+  room: string (required);
+}
+
+table LeaveRoom {
+  room: string (required);
+}
+
+table Publish {
+  room: string (required);
+  message: DomainPayload;
+}
+
+table SubscriptionAck {
+  room: string (required);
+  operation: SubscriptionOperation;
+  accepted: bool;
+  reason: string;
+}
+
+table ErrorResponse {
+  code: ErrorCode;
+  message: string (required);
+  related_request_id: uint64;
+}
+
+union Payload {
+  MatchInfo,
+  MatchScoreUpdate,
+  FacilityUpdate,
+  EquipmentUpdate,
+  BookingNotification,
+  SystemAlert,
+  Ping,
+  Pong,
+  Authenticate,
+  AuthenticationResult,
+  JoinRoom,
+  LeaveRoom,
+  Publish,
+  SubscriptionAck,
+  ErrorResponse
+}
+
+table NetworkMessage {
+  protocol_version: uint16 = 1;
+  request_id: uint64;
+  sequence_id: uint64;
+  sent_at_ms: uint64;
+  payload: Payload;
+}
+
+root_type NetworkMessage;

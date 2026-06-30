@@ -74,6 +74,7 @@ src/transport/        WebSocket handshake and frame parser
 schema/               FlatBuffers protocol schema
 generated/            Generated C++ protocol bindings
 client/               TypeScript SDK and generated TypeScript bindings
+benchmarks/           Local microbenchmarks and real TCP/WebSocket benchmark harness
 tests/                Portable C++ tests
 scripts/              Schema generation and verification helpers
 docs/                 Architecture, protocol, benchmark, and interview notes
@@ -116,6 +117,27 @@ On a non-Windows host, configure only the portable pieces:
 cmake -S . -B build -DIOCP_ENGINE_BUILD_SERVER=OFF
 cmake --build build --target protocol_tests
 ctest --test-dir build --output-on-failure
+```
+
+## Local Benchmarks
+
+Recent local run:
+
+| Benchmark | Result |
+| --- | ---: |
+| FlatBuffers publish serialization | 551,864 msg/sec |
+| TCP ping round-trip median | 0.158 ms |
+| TCP ping round-trip P99 | 0.398 ms |
+| TCP ping throughput | 5,853 msg/sec |
+| WebSocket ping round-trip median | 0.118 ms |
+| WebSocket ping round-trip P99 | 0.310 ms |
+| WebSocket ping throughput | 7,611 msg/sec |
+| TCP pub/sub fanout, 8 subscribers | 38,419 delivered msg/sec |
+| WebSocket pub/sub fanout, 8 subscribers | 26,514 delivered msg/sec |
+
+The broadcast benchmark delivered `8,000 / 8,000` expected messages for both
+TCP and WebSocket runs.
+
 ```
 
 ## Run The Server
@@ -165,7 +187,6 @@ equipment:
 booking:user:
 ```
 
-See [docs/protocol.md](docs/protocol.md) for the full protocol notes.
 
 ## Current Limitations
 

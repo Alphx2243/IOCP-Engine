@@ -101,7 +101,9 @@ public:
         }
 
         auto* slot = reinterpret_cast<Slot*>(bytes - offsetof(Slot, storage));
+#ifndef NDEBUG
         const auto index = static_cast<std::size_t>(slot - slots_);
+#endif
         {
             std::lock_guard lock(mutex_);
 #ifndef NDEBUG

@@ -114,7 +114,12 @@ target_compile_features(realtime_protocol PUBLIC cxx_std_20)
 
 function(enable_strict_warnings target)
     if(MSVC)
-        target_compile_options(${target} PRIVATE /W4 /permissive- /Zc:__cplusplus)
+        target_compile_options(${target} PRIVATE
+            /W4
+            /permissive-
+            /Zc:__cplusplus
+            /EHsc
+        )
         if(IOCP_ENGINE_WARNINGS_AS_ERRORS)
             target_compile_options(${target} PRIVATE /WX)
         endif()

@@ -5,10 +5,6 @@ updates. The native server is built around Winsock overlapped I/O and IOCP, and
 the TypeScript SDK lets browser or Node.js clients consume the same binary
 FlatBuffers protocol over WebSocket or raw TCP.
 
-This repository is intended to demonstrate systems design, protocol design,
-asynchronous networking, C++ resource management, and client SDK ergonomics in a
-single resume-ready project.
-
 ## Highlights
 
 - Windows IOCP server using `AcceptEx`, completion ports, owned worker threads,
@@ -72,14 +68,8 @@ src/protocol/         Raw TCP message framing
 src/pubsub/           Room subscription registry
 src/transport/        WebSocket handshake and frame parser
 schema/               FlatBuffers protocol schema
-generated/            Generated C++ protocol bindings
-client/               TypeScript SDK and generated TypeScript bindings
-benchmarks/           Local microbenchmarks and real TCP/WebSocket benchmark harness
-tests/                Portable C++ tests
-scripts/              Schema generation and verification helpers
-docs/                 Architecture, protocol, benchmark, and interview notes
+docs/                 Architecture, protocol, benchmark.
 ```
-
 ## Requirements
 
 - Windows 10/11 or Windows Server for the native IOCP server.
@@ -134,9 +124,6 @@ Recent local run:
 | WebSocket ping throughput | 7,611 msg/sec |
 | TCP pub/sub fanout, 8 subscribers | 38,419 delivered msg/sec |
 | WebSocket pub/sub fanout, 8 subscribers | 26,514 delivered msg/sec |
-
-The broadcast benchmark delivered `8,000 / 8,000` expected messages for both
-TCP and WebSocket runs.
 
 ```
 
